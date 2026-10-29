@@ -5,26 +5,27 @@ import { useFormStatus } from "react-dom";
 type Props = {
   children: React.ReactNode;
   pendingLabel?: string;
-  variant?: "solid" | "ghost" | "danger";
+  variant?: "primary" | "ghost" | "danger";
+  size?: "md" | "sm";
   className?: string;
 };
 
-const styles = {
-  solid:
-    "bg-ink text-chalk hover:bg-pitch-deep disabled:bg-ink-soft",
-  ghost:
-    "border-2 border-ink text-ink hover:bg-ink hover:text-chalk",
-  danger:
-    "border-2 border-flag text-flag hover:bg-flag hover:text-chalk",
+export const buttonStyles = {
+  primary:
+    "bg-gold text-night shadow-[0_10px_30px_-10px_rgb(255_200_94/0.7)] hover:bg-[#ffd47f]",
+  ghost: "glass-soft text-chalk hover:bg-white/10",
+  danger: "border border-flare/40 bg-flare/10 text-flare hover:bg-flare/20",
 };
 
-export function SubmitButton({ children, pendingLabel, variant = "solid", className = "" }: Props) {
+export function SubmitButton({ children, pendingLabel, variant = "primary", size = "md", className = "" }: Props) {
   const { pending } = useFormStatus();
   return (
     <button
       type="submit"
       disabled={pending}
-      className={`inline-flex items-center justify-center px-5 py-3 font-display text-lg uppercase tracking-wide transition-colors disabled:cursor-wait ${styles[variant]} ${className}`}
+      className={`inline-flex items-center justify-center rounded-full font-semibold transition disabled:cursor-wait disabled:opacity-60 ${
+        size === "md" ? "px-6 py-3 text-[15px]" : "px-3.5 py-1.5 text-sm"
+      } ${buttonStyles[variant]} ${className}`}
     >
       {pending ? (pendingLabel ?? "Bekle…") : children}
     </button>

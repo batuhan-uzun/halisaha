@@ -10,70 +10,67 @@ export function MatchForm({ days, defaultDay }: { days: DayOption[]; defaultDay?
   const [state, action] = useActionState<MatchFormState, FormData>(createMatch, {});
 
   return (
-    <form key={state.key} action={action} className="space-y-6 border-2 border-ink bg-chalk p-5 sm:p-7">
-      <div className="grid gap-6 sm:grid-cols-[1.4fr_1fr_1fr]">
-        <label className="block">
-          <Label>Gün</Label>
-          <select name="match_date" defaultValue={defaultDay} required className="field-input">
+    <form key={state.key} action={action} className="space-y-5">
+      <div className="grid gap-4 sm:grid-cols-[1.6fr_1fr_1fr]">
+        <Field label="Gün">
+          <select name="match_date" defaultValue={defaultDay} required className="field">
             {days.map((d) => (
               <option key={d.value} value={d.value}>
                 {d.label}
               </option>
             ))}
           </select>
-        </label>
-        <label className="block">
-          <Label>Başlama</Label>
-          <input name="start_time" type="time" required defaultValue="21:00" className="field-input font-mono" />
-        </label>
-        <label className="block">
-          <Label>Bitiş</Label>
-          <input name="end_time" type="time" defaultValue="22:00" className="field-input font-mono" />
-        </label>
+        </Field>
+        <Field label="Başlama">
+          <input name="start_time" type="time" required defaultValue="21:00" className="field tabular-nums" />
+        </Field>
+        <Field label="Bitiş">
+          <input name="end_time" type="time" defaultValue="22:00" className="field tabular-nums" />
+        </Field>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2">
-        <label className="block">
-          <Label>Halı saha</Label>
-          <input name="pitch_name" required maxLength={100} placeholder="Örn. Yıldız Spor Tesisleri" className="field-input" />
-        </label>
-        <label className="block">
-          <Label>Adres</Label>
-          <input name="address" maxLength={200} placeholder="Mahalle, sokak, ilçe" className="field-input" />
-        </label>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Halı saha">
+          <input name="pitch_name" required maxLength={100} placeholder="Örn. Yıldız Spor Tesisleri" className="field" />
+        </Field>
+        <Field label="Adres">
+          <input name="address" maxLength={200} placeholder="Mahalle, sokak, ilçe" className="field" />
+        </Field>
       </div>
 
-      <label className="block">
-        <Label hint="İsteğe bağlı">Harita linki</Label>
-        <input name="maps_url" type="url" inputMode="url" placeholder="https://maps.app.goo.gl/..." className="field-input" />
-      </label>
-
-      <label className="block">
-        <Label hint="İsteğe bağlı">Not</Label>
-        <input name="notes" maxLength={500} placeholder="Örn. Saha 2 numara, kaleci eldiveni getirin" className="field-input" />
-      </label>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Harita linki" hint="İsteğe bağlı">
+          <input name="maps_url" type="url" inputMode="url" placeholder="https://maps.app.goo.gl/..." className="field" />
+        </Field>
+        <Field label="Not" hint="İsteğe bağlı">
+          <input name="notes" maxLength={500} placeholder="Örn. 2 numaralı saha, açık renk forma" className="field" />
+        </Field>
+      </div>
 
       {state.error && (
-        <p role="alert" className="border-l-4 border-flag px-3 py-2 text-sm text-flag">
+        <p role="alert" className="rounded-xl border border-flare/30 bg-flare/10 px-3.5 py-2.5 text-sm text-flare">
           {state.error}
         </p>
       )}
       {state.ok && (
-        <p role="status" className="border-l-4 border-pitch px-3 py-2 text-sm text-pitch">
-          Maç kaydedildi, ana sayfada herkes görüyor.
+        <p role="status" className="rounded-xl border border-pitch/30 bg-pitch/10 px-3.5 py-2.5 text-sm text-pitch">
+          Maç yayınlandı, ana sayfada herkes görüyor.
         </p>
       )}
 
-      <SubmitButton pendingLabel="Kaydediliyor…">Maçı yayınla</SubmitButton>
+      <SubmitButton pendingLabel="Yayınlanıyor…">Maçı yayınla</SubmitButton>
     </form>
   );
 }
 
-function Label({ children, hint }: { children: React.ReactNode; hint?: string }) {
+function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
-    <span className="flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-ink-soft">
+    <label className="block">
+      <span className="mb-1.5 flex items-baseline justify-between text-sm font-medium text-white/80">
+        {label}
+        {hint && <span className="text-xs font-normal text-white/45">{hint}</span>}
+      </span>
       {children}
-      {hint && <span className="normal-case tracking-normal">{hint}</span>}
-    </span>
+    </label>
   );
 }

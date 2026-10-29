@@ -49,7 +49,7 @@ export async function createMatch(_prev: MatchFormState, formData: FormData): Pr
   if (error) return { error: "Maç kaydedilemedi, tekrar dene." };
 
   revalidatePath("/");
-  revalidatePath("/yonetim");
+  revalidatePath("/yonetim", "layout");
   return { ok: true, key: Date.now() };
 }
 
@@ -60,7 +60,7 @@ export async function deleteMatch(formData: FormData) {
   if (!id) return;
   await supabase.from("matches").delete().eq("id", id);
   revalidatePath("/");
-  revalidatePath("/yonetim");
+  revalidatePath("/yonetim", "layout");
 }
 
 export async function setRole(formData: FormData) {
@@ -70,5 +70,5 @@ export async function setRole(formData: FormData) {
   const role = field(formData, "role");
   if (!target || (role !== "admin" && role !== "member")) return;
   await supabase.rpc("set_user_role", { target, new_role: role });
-  revalidatePath("/yonetim/uyeler");
+  revalidatePath("/yonetim", "layout");
 }

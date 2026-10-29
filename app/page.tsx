@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { AvailabilityBoard } from "@/components/AvailabilityBoard";
-import { Masthead } from "@/components/Masthead";
 import { MatchRow, MatchTicket } from "@/components/MatchTicket";
 import { Footer, SectionTitle } from "@/components/Section";
+import { TopBar } from "@/components/TopBar";
 import { windowDays } from "@/lib/dates";
 import { requireProfile } from "@/lib/session";
 import { isAdminRole, type Match } from "@/lib/types";
@@ -32,30 +32,35 @@ export default async function HomePage() {
   for (const row of (countsRes.data ?? []) as { day: string; available: number }[]) {
     counts[row.day] = row.available;
   }
+  const total = typeof totalRes.data === "number" ? totalRes.data : 0;
   const matches = matchesRes.data ?? [];
   const [next, ...later] = matches;
   const isAdmin = isAdminRole(profile.role);
 
   return (
     <>
-      <Masthead profile={profile} />
-      <main className="mx-auto w-full max-w-5xl space-y-14 px-4 pb-20 pt-8 sm:px-6 sm:pt-10">
-        <section aria-labelledby="mac">
-          <SectionTitle id="mac" kicker="Manşet">
-            {next ? "Maç günü belli" : "Maç henüz belli değil"}
-          </SectionTitle>
+      <TopBar profile={profile} />
+      <main className="mx-auto w-full max-w-6xl space-y-10 px-4 pb-16 pt-8 sm:px-6 sm:pt-10">
+        <div className="rise">
+          <p className="text-sm text-white/60">
+            Selam {profile.first_name} {profile.last_name},
+          </p>
+          <h1 className="font-display mt-1 text-3xl uppercase leading-tight sm:text-5xl">
+            {next ? "Maç günü belli" : "Maç günü henüz belli değil"}
+          </h1>
+        </div>
+
+        <section aria-label="Sıradaki maç">
           {next ? (
-            <MatchTicket match={next} attending={counts[next.match_date]} />
+            <MatchTicket match={next} attending={counts[next.match_date]} total={total} />
           ) : (
-            <div className="border-2 border-dashed border-ink/40 px-5 py-8 sm:px-8">
-              <p className="max-w-xl font-display text-3xl uppercase leading-[0.95] sm:text-4xl">
-                Sahayı daha kimse tutmadı.
-              </p>
-              <p className="mt-3 max-w-xl text-ink-soft">
+            <div className="glass rise rounded-[28px] p-6 sm:p-8">
+              <p className="font-display text-xl uppercase sm:text-2xl">Sahayı daha kimse tutmadı</p>
+              <p className="mt-2 max-w-xl text-white/65">
                 Aşağıdan müsait olduğun günleri işaretle. Adminler en çok kişinin boş olduğu güne maçı koyunca burada görünecek.
               </p>
               {isAdmin && (
-                <Link href="/yonetim" className="mt-5 inline-block bg-ink px-4 py-2.5 font-display text-lg uppercase text-chalk hover:bg-pitch-deep">
+                <Link href="/yonetim/maclar" className="mt-5 inline-flex rounded-full bg-gold px-5 py-2.5 text-[15px] font-semibold text-night hover:bg-[#ffd47f]">
                   Maç belirle
                 </Link>
               )}
@@ -63,9 +68,9 @@ export default async function HomePage() {
           )}
 
           {later.length > 0 && (
-            <div className="mt-8">
-              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-soft">Sonraki maçlar</p>
-              <ul className="mt-1 border-t-2 border-ink">
+            <div className="glass mt-4 rounded-[24px] px-5 py-2 sm:px-6">
+              <p className="pt-3 text-xs font-medium uppercase tracking-wider text-white/45">Sonraki maçlar</p>
+              <ul className="divide-y divide-white/8">
                 {later.map((m) => (
                   <MatchRow key={m.id} match={m} />
                 ))}
@@ -78,15 +83,12 @@ export default async function HomePage() {
           <SectionTitle id="musaitlik" kicker="Önümüzdeki 30 gün">
             Ne zaman müsaitsin?
           </SectionTitle>
-          <p className="-mt-2 mb-5 max-w-2xl text-ink-soft">
-            Boş olduğun günlere dokun, tekrar dokunursan geri alırsın. Her günün altındaki çizgi o gün kaç kişinin müsait olduğunu gösterir.
-          </p>
           <AvailabilityBoard
             userId={profile.id}
             days={days}
             initialMine={(mineRes.data ?? []).map((r) => r.day as string)}
             initialCounts={counts}
-            total={typeof totalRes.data === "number" ? totalRes.data : 0}
+            total={total}
             matchDays={matches.map((m) => m.match_date)}
           />
         </section>

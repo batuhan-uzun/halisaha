@@ -1,33 +1,38 @@
-import { Masthead } from "@/components/Masthead";
-import { PitchLines } from "@/components/PitchLines";
+import { TopBar } from "@/components/TopBar";
+
+const STEPS = [
+  ["Kaydol", "Adın, soyadın ve e-postan yeterli."],
+  ["Müsait günlerini işaretle", "Önümüzdeki 30 günde boş olduğun akşamları seç."],
+  ["Maç belli olur", "Adminler en kalabalık güne sahayı tutar, burada görürsün."],
+];
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Masthead section="Kadroya katıl" />
-      <main className="mx-auto grid w-full max-w-5xl gap-8 px-4 pb-16 pt-8 sm:px-6 md:grid-cols-[1.05fr_1fr] md:gap-12 md:pt-12">
-        <section className="turf relative hidden min-h-[440px] overflow-hidden text-chalk md:block">
-          <PitchLines className="absolute inset-0 h-full w-full text-chalk/30" />
-          <div className="relative flex h-full flex-col justify-between p-8">
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-chalk/70">Nasıl işliyor</p>
-            <ol className="space-y-6">
-              {[
-                ["01", "Kaydol", "Adın, soyadın, e-postan. Bu kadar."],
-                ["02", "Müsait günlerini işaretle", "Önümüzdeki 30 günde hangi akşamlar boşsun?"],
-                ["03", "Maç belli olur", "Adminler en kalabalık güne sahayı tutar, burada görürsün."],
-              ].map(([no, title, body]) => (
-                <li key={no} className="grid grid-cols-[3.25rem_1fr] items-baseline">
-                  <span className="font-display text-4xl leading-none text-flag">{no}</span>
-                  <div>
-                    <p className="font-display text-2xl uppercase leading-tight">{title}</p>
-                    <p className="mt-1 text-sm text-chalk/75">{body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
+      <TopBar />
+      <main className="mx-auto grid min-h-[calc(100dvh-4rem)] w-full max-w-6xl items-center gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_minmax(0,440px)] lg:gap-16">
+        <section className="rise hidden lg:block">
+          <p className="text-sm font-medium text-gold">Bu akşam kim var?</p>
+          <h1 className="font-display mt-3 text-6xl uppercase leading-[0.95] xl:text-7xl">
+            Maç günü
+            <br />
+            <span className="text-pitch">birlikte</span> belli olur
+          </h1>
+          <ol className="mt-10 max-w-md space-y-5">
+            {STEPS.map(([title, body], i) => (
+              <li key={title} className="flex gap-4">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/8 text-sm font-bold ring-1 ring-white/15">
+                  {i + 1}
+                </span>
+                <div>
+                  <p className="font-semibold">{title}</p>
+                  <p className="text-sm text-white/60">{body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </section>
-        <section className="flex flex-col justify-center">{children}</section>
+        <section className="glass rise rounded-[28px] p-6 sm:p-8">{children}</section>
       </main>
     </>
   );

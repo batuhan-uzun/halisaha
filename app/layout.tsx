@@ -1,23 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Anton, Archivo, IBM_Plex_Mono } from "next/font/google";
+import { Archivo } from "next/font/google";
+import { Stadium } from "@/components/Stadium";
 import "./globals.css";
-
-const anton = Anton({
-  weight: "400",
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-anton",
-});
 
 const archivo = Archivo({
   subsets: ["latin", "latin-ext"],
   axes: ["wdth"],
   variable: "--font-archivo",
-});
-
-const plexMono = IBM_Plex_Mono({
-  weight: ["400", "500", "600"],
-  subsets: ["latin", "latin-ext"],
-  variable: "--font-plex-mono",
 });
 
 export const metadata: Metadata = {
@@ -26,13 +15,16 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f2ede3",
+  themeColor: "#040c08",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="tr" className={`${anton.variable} ${archivo.variable} ${plexMono.variable}`}>
-      <body>{children}</body>
+    <html lang="tr" className={archivo.variable}>
+      <body>
+        <Stadium />
+        {children}
+      </body>
     </html>
   );
 }
