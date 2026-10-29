@@ -38,14 +38,9 @@ export function MatchForm({ days, defaultDay }: { days: DayOption[]; defaultDay?
         </Field>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Harita linki" hint="İsteğe bağlı">
-          <input name="maps_url" type="url" inputMode="url" placeholder="https://maps.app.goo.gl/..." className="field" />
-        </Field>
-        <Field label="Not" hint="İsteğe bağlı">
-          <input name="notes" maxLength={500} placeholder="Örn. 2 numaralı saha, açık renk forma" className="field" />
-        </Field>
-      </div>
+      <Field label="Harita linki" hint="İsteğe bağlı">
+        <input name="maps_url" type="url" inputMode="url" placeholder="https://maps.app.goo.gl/..." className="field" />
+      </Field>
 
       {state.error && (
         <p role="alert" className="rounded-xl border border-flare/30 bg-flare/10 px-3.5 py-2.5 text-sm text-flare">

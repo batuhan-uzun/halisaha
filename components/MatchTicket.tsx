@@ -48,9 +48,6 @@ export function MatchTicket({ match, attending, total }: { match: Match; attendi
               {match.address && <span className="mt-1 block text-sm text-white/60">{match.address}</span>}
             </Info>
           </div>
-          {match.notes && (
-            <p className="glass-soft rounded-2xl px-4 py-3 text-sm text-white/80">{match.notes}</p>
-          )}
           <div className="flex flex-wrap items-center gap-3">
             <a
               href={mapsHref(match)}
